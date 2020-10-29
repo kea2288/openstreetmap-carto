@@ -4,7 +4,7 @@
 @scrub: #c8d7ab;        // Lch(84,24,122)
 @forest: #add19e;       // Lch(80,30,135)
 @forest-text: #46673b;  // Lch(40,30,135)
-@park: #c8facc;         // Lch(94,30,145)
+@park: #ddf2b8;         // Lch(94,30,145)
 @allotments: #c9e1bf;   // Lch(87,20,135)
 @orchard: #aedfa3; // also vineyard, plant_nursery
 @hedge: @forest;       // Lch(80,30,135)
@@ -12,15 +12,15 @@
 // --- "Base" landuses ---
 
 @built-up-lowzoom: #d0d0d0;
-@built-up-z12: #dddddd;
-@residential: #e0dfdf;      // Lch(89,0,0)
-@residential-line: #b9b9b9; // Lch(75,0,0)
-@retail: #ffd6d1;           // Lch(89,16,30)
-@retail-line: #d99c95;      // Lch(70,25,30)
-@commercial: #f2dad9;       // Lch(89,8.5,25)
-@commercial-line: #d1b2b0;  // Lch(75,12,25)
-@industrial: #ebdbe8;       // Lch(89,9,330) (Also used for railway, wastewater_plant)
-@industrial-line: #c6b3c3;  // Lch(75,11,330) (Also used for railway-line, wastewater_plant-line)
+@built-up-z12: #f9f5ed;
+@residential: #f9f5ed;      // Lch(89,0,0)
+@residential-line: #f9f5ed; // Lch(75,0,0)
+@retail: #f9f5ed;           // Lch(89,16,30)
+@retail-line: #f9f5ed;      // Lch(70,25,30)
+@commercial: #f9f5ed;       // Lch(89,8.5,25)
+@commercial-line: #f9f5ed;  // Lch(75,12,25)
+@industrial: #f9f5ed;       // Lch(89,9,330) (Also used for railway, wastewater_plant)
+@industrial-line: #f9f5ed;  // Lch(75,11,330) (Also used for railway-line, wastewater_plant-line)
 @farmland: #eef0d5;         // Lch(94,14,112)
 @farmland-line: #c7c9ae;    // Lch(80,14,112)
 @farmyard: #f5dcba;         // Lch(89,20,80)
@@ -48,13 +48,10 @@
 @place_of_worship: #d0d0d0; // also landuse_religious
 @place_of_worship_outline: darken(@place_of_worship, 30%);
 @leisure: lighten(@park, 5%);
-@power: darken(@industrial, 5%);
-@power-line: darken(@industrial-line, 5%);
 @sand: #f5e9c6;
 @societal_amenities: #ffffe5;   // Lch(99,13,109)
 @tourism: #660033;
 @quarry: #c5c3c3;
-@military: #f55;
 @beach: #fff1ba;
 @wastewater_plant: @industrial;
 @wastewater_plant-line: @industrial-line;
@@ -63,7 +60,7 @@
 
 // --- Sports ---
 
-@pitch: #aae0cb;           // Lch(85,22,168) also track
+@pitch: #c6ebb0;           // Lch(85,22,168) also track
 @track: @pitch;
 @stadium: @leisure; // also sports_centre
 @golf_course: #b5e3b5;
@@ -427,24 +424,6 @@
     [way_pixels >= 64] { polygon-gamma: 0.3;  }
   }
 
-  [feature = 'power_plant'][zoom >= 10],
-  [feature = 'power_generator'][zoom >= 10],
-  [feature = 'power_substation'][zoom >= 13] {
-    polygon-fill: @industrial;
-    [zoom >= 15] {
-      polygon-fill: @power;
-    }
-    [zoom >= 16] {
-      line-width: 0.5;
-      line-color: @power-line;
-      [name != ''] {
-        line-width: 0.7;
-      }
-    }
-    [way_pixels >= 4]  { polygon-gamma: 0.75; }
-    [way_pixels >= 64] { polygon-gamma: 0.3;  }
-  }
-
   [feature = 'landuse_commercial'][zoom >= 8] {
     polygon-fill: @built-up-lowzoom;
     [zoom >= 12] { polygon-fill: @built-up-z12; }
@@ -458,15 +437,6 @@
     }
     [way_pixels >= 4]  { polygon-gamma: 0.75; }
     [way_pixels >= 64] { polygon-gamma: 0.3;  }
-  }
-
-  [feature = 'landuse_brownfield'],
-  [feature = 'landuse_construction'] {
-    [zoom >= 10] {
-      polygon-fill: @construction;
-      [way_pixels >= 4]  { polygon-gamma: 0.75; }
-      [way_pixels >= 64] { polygon-gamma: 0.3;  }
-    }
   }
 
   [feature = 'landuse_landfill'] {
@@ -591,21 +561,6 @@
       polygon-fill: @societal_amenities;
       line-width: 0.3;
       line-color: darken(@societal_amenities, 35%);
-    }
-  }
-
-  [feature = 'amenity_fire_station'][zoom >= 8][way_pixels > 900],
-  [feature = 'amenity_police'][zoom >= 8][way_pixels > 900],
-  [feature = 'amenity_fire_station'][zoom >= 13],
-  [feature = 'amenity_police'][zoom >= 13] {
-    polygon-fill: #F3E3DD;
-    line-color: @military;
-    line-opacity: 0.24;
-    line-width: 1.0;
-    line-offset: -0.5;
-    [zoom >= 15] {
-      line-width: 2;
-      line-offset: -1.0;
     }
   }
 
@@ -799,27 +754,6 @@
     [leaf_type = "leafless"] { polygon-pattern-file: url('symbols/leaftype_leafless.svg'); }
     polygon-pattern-alignment: global;
     opacity: 0.4; // The entire layer has opacity to handle overlapping forests
-  }
-}
-
-#landuse-overlay {
-  [landuse = 'military'][zoom >= 8][way_pixels > 900],
-  [landuse = 'military'][zoom >= 13],
-  [military = 'danger_area'][zoom >= 9] {
-    polygon-pattern-file: url('symbols/military_red_hatch.png');
-    polygon-pattern-alignment: global;
-    line-color: @military;
-    line-opacity: 0.24;
-    line-width: 1.0;
-    line-offset: -0.5;
-    [zoom >= 15] {
-      [military = 'danger_area'][zoom >= 9] {
-        polygon-pattern-file: url('symbols/danger_red_hatch.png');
-        line-opacity: 0.2;
-      }
-      line-width: 2;
-      line-offset: -1.0;
-    }
   }
 }
 
